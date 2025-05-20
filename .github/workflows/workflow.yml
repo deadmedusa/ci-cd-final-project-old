@@ -16,9 +16,10 @@ jobs:
 
       - name: Set up Python environment
         run: |
-          # Create and activate virtual environment as non-root user
+          # Create virtual environment
           python -m venv /opt/venv --clear
-          source /opt/venv/bin/activate
+          # Use . instead of source for POSIX compliance
+          . /opt/venv/bin/activate
           
           # Upgrade pip and setuptools within the virtual environment
           pip install --upgrade pip setuptools wheel
@@ -29,13 +30,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          source /opt/venv/bin/activate
+          . /opt/venv/bin/activate
           pip install -r requirements.txt
           pip install nose coverage flake8 autopep8 pylint
 
       - name: Nuclear code formatting
         run: |
-          source /opt/venv/bin/activate
+          . /opt/venv/bin/activate
           # First pass: aggressive reformatting
           autopep8 --in-place --recursive --aggressive \
             --max-line-length=127 \
@@ -58,7 +59,7 @@ jobs:
 
       - name: Strict linting
         run: |
-          source /opt/venv/bin/activate
+          . /opt/venv/bin/activate
           # Create .flake8 config dynamically
           cat > .flake8 <<EOF
           [flake8]
@@ -80,5 +81,5 @@ jobs:
 
       - name: Run tests
         run: |
-          source /opt/venv/bin/activate
+          . /opt/venv/bin/activate
           nosetests -c setup.cfg --with-xunit --xunit-file=./unittests.xml
