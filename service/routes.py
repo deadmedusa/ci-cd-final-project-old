@@ -64,7 +64,6 @@ def create_counters(name):
 
     COUNTER[name] = 0
     location_url = url_for("read_counters", name=name, _external=True)
-    
     return (
         jsonify(name=name, counter=0),
         status.HTTP_201_CREATED,
